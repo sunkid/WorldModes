@@ -1,0 +1,5 @@
+.classpath
+.project
+.settings/
+target/
+plugin/src/main/resources/buildNumber.properties
