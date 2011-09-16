@@ -1,0 +1,9 @@
+Listed below are released versions and cumulative changes between them
+
+${project.version}
+
+* added support for bukkit permissions
+
+1.4
+
+* first standalone release
