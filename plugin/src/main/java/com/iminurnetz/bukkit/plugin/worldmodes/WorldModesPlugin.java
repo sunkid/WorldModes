@@ -30,6 +30,13 @@ import org.bukkit.plugin.PluginManager;
 import com.iminurnetz.bukkit.plugin.BukkitPlugin;
 
 public class WorldModesPlugin extends BukkitPlugin {
+    public int MIN_SERVER_VERSION = 1031;
+
+    @Override
+    public int getMinimumServerVersion() {
+        return this.MIN_SERVER_VERSION;
+    }
+
     @Override
     public void enablePlugin() throws Exception {
         PluginManager pm = getServer().getPluginManager();

@@ -23,7 +23,6 @@
  */
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -34,7 +33,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.permissions.PermissionHandlerService;
-import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
 public class WMPlayerListener extends PlayerListener implements Listener {
     private static final String PERMISSION_PREFIX = "worldmodes.";
