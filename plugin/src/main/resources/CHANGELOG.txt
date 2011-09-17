@@ -1,0 +1,6 @@
+Listed below are released versions and cumulative changes between them
+
+${project.version}
+
+* initial release
+* supports world-specific game modes
