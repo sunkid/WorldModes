@@ -2,5 +2,13 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* retired PLAYER_MOVE hook in favor of PLAYER_PORTAL
+
+1.1
+
+* added Bukkit version check
+
+1.0
+
 * initial release
 * supports world-specific game modes

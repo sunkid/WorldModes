@@ -42,7 +42,7 @@ public class WorldModesPlugin extends BukkitPlugin {
         PluginManager pm = getServer().getPluginManager();
         WMPlayerListener listener = new WMPlayerListener(this);
         pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, listener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_MOVE, listener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_PORTAL, listener, Priority.Monitor, this);
         pm.registerEvent(Type.PLAYER_TELEPORT, listener, Priority.Monitor, this);
     }
 }

@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
@@ -53,7 +54,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     }
 
     @Override
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerPortal(PlayerPortalEvent event) {
         checkWorldTransition(event);
     }
 
