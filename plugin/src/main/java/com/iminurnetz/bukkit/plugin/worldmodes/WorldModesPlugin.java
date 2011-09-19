@@ -23,14 +23,23 @@
  */
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 
+import com.iminurnetz.bukkit.permissions.PermissionHandler;
+import com.iminurnetz.bukkit.permissions.PermissionHandlerService;
 import com.iminurnetz.bukkit.plugin.BukkitPlugin;
+import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
 public class WorldModesPlugin extends BukkitPlugin {
     public int MIN_SERVER_VERSION = 1031;
+    private PermissionHandler permissionHandler;
 
     @Override
     public int getMinimumServerVersion() {
@@ -40,9 +49,113 @@ public class WorldModesPlugin extends BukkitPlugin {
     @Override
     public void enablePlugin() throws Exception {
         PluginManager pm = getServer().getPluginManager();
-        WMPlayerListener listener = new WMPlayerListener(this);
+        permissionHandler = PermissionHandlerService.getHandler(this);
+        WMPlayerListener listener = new WMPlayerListener(this, permissionHandler);
         pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, listener, Priority.Lowest, this);
         pm.registerEvent(Type.PLAYER_PORTAL, listener, Priority.Monitor, this);
         pm.registerEvent(Type.PLAYER_TELEPORT, listener, Priority.Monitor, this);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Player player = null;
+        boolean senderIsPlayer = false;
+        if (sender instanceof Player) {
+            player = (Player) sender;
+            senderIsPlayer = true;
+        }
+
+        Player targetPlayer = null;
+        GameMode mode = null;
+        switch (args.length) {
+        case 0:
+            if (senderIsPlayer) {
+                targetPlayer = player;
+                mode = getToggledMode(player);
+            }
+            break;
+
+        case 1:
+            targetPlayer = getServer().getPlayer(args[0]);
+            if (targetPlayer == null) {
+                if (senderIsPlayer) {
+                    targetPlayer = player;
+                    mode = extractMode(args[0]);
+                }
+            } else {
+                mode = getToggledMode(targetPlayer);
+            }
+            break;
+
+        case 2:
+            targetPlayer = getServer().getPlayer(args[0]);
+            mode = extractMode(args[1]);
+            break;
+
+        default:
+            return false;
+        }
+
+        if (senderIsPlayer) {
+            if (player.equals(targetPlayer)) {
+                if (!permissionHandler.hasPermission(player, "worldmodes.set.self")) {
+                    MessageUtils.send(sender, ChatColor.RED, "You are not permitted to change your game mode!");
+                    return true;
+                }
+            } else if (targetPlayer != null) {
+                String group = permissionHandler.getGroup(targetPlayer).toLowerCase();
+                if (!permissionHandler.hasPermission(player, "worldmodes.set.others") && !permissionHandler.hasPermission(player, "worldmodes.set." + group)) {
+                    MessageUtils.send(sender, ChatColor.RED, "You are not permitted to change " + player.getName() + "'s game mode!");
+                    return true;
+                }
+            }
+        }
+        
+        if (targetPlayer == null) {
+            MessageUtils.send(sender, ChatColor.RED, "You must provide a valid player name!");
+            return false;
+        } else if (mode == null) {
+            return false;
+        }
+        
+        if (mode == targetPlayer.getGameMode()) {
+            if (senderIsPlayer) {
+                MessageUtils.send(sender, ChatColor.RED, "Your game mode is already set to " + ChatColor.YELLOW + mode.name() + ChatColor.RED + "!");
+            } else {
+                MessageUtils.send(sender, ChatColor.RED, targetPlayer.getName() + "'s game mode is already set to " + ChatColor.YELLOW + mode.name() + ChatColor.RED + "!");
+            }
+            return true;
+        }
+
+        targetPlayer.setGameMode(mode);
+
+        if (senderIsPlayer && targetPlayer.getGameMode() != mode) {
+            MessageUtils.send(sender, ChatColor.RED, "The game mode change was cancelled!");
+        }
+
+        return true;
+    }
+
+    private GameMode extractMode(String arg) {
+        if (arg == null) {
+            return null;
+        }
+
+        try {
+            int value = Integer.valueOf(arg);
+            return GameMode.getByValue(value);
+        } catch (NumberFormatException e) {
+            if (arg.startsWith("s")) {
+                return GameMode.SURVIVAL;
+            } else if (arg.startsWith("c")) {
+                return GameMode.CREATIVE;
+            }
+        }
+
+        return null;
+    }
+
+    protected GameMode getToggledMode(Player player) {
+        return GameMode.getByValue(player.getGameMode().getValue() == 0 ? 1 : 0);
     }
 }

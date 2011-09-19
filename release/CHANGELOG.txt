@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+1.3
+
+* implemented command and permission nodes to change game mode
+
 1.2
 
 * retired PLAYER_MOVE hook in favor of PLAYER_PORTAL

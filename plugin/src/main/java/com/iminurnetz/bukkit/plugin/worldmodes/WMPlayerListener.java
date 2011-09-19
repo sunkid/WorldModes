@@ -33,15 +33,14 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
-import com.iminurnetz.bukkit.permissions.PermissionHandlerService;
 
 public class WMPlayerListener extends PlayerListener implements Listener {
     private static final String PERMISSION_PREFIX = "worldmodes.";
     private final WorldModesPlugin plugin;
     private final PermissionHandler permissionHandler;
 
-    public WMPlayerListener(WorldModesPlugin plugin) {
-        this.permissionHandler = PermissionHandlerService.getHandler(plugin);
+    public WMPlayerListener(WorldModesPlugin plugin, PermissionHandler permissionHandler) {
+        this.permissionHandler = permissionHandler;
         this.plugin = plugin;
     }
 
@@ -73,7 +72,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
                 Player player = event.getPlayer();
                 GameMode mode = player.getGameMode();
                 if (!hasPermission(player, mode)) {
-                    GameMode newMode = GameMode.getByValue(mode.getValue() == 0 ? 1 : 0);
+                    GameMode newMode = plugin.getToggledMode(player);
                     player.setGameMode(newMode);
                 }
             }

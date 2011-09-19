@@ -28,14 +28,31 @@ website: https://github.com/sunkid/${project.name}
 depends: [BaseBukkitPlugin]
 
 commands:
+    gamemode:
+        description: toggles game mode for yourself or other players
+        usage: /gm [<player>] [{survival|s|0|creative|c|1}]
+        aliases: [gm,gmt,gms]
 
 permissions:
     worldmodes.*:
-        description: Players can be in either mode
+        description: Players can be in either mode and can set their own modes or that of other players.
         children:
+            worldmodes.set.*: true
             worldmodes.survival: true
             worldmodes.creative: true
-      
+
+    worldmodes.set.*: 
+        description: Players can set their own modes or that of other players.
+        children:
+            worldmodes.set.self: true
+            worldmodes.set.others: true
+
+    worldmodes.set.self:
+        description: Players can change their own game mode.
+
+    worldmodes.set.others:
+        description: Players can change modes of other players.
+
     worldmodes.survival:
         description: Players are only allowed to be in survival mode
         
