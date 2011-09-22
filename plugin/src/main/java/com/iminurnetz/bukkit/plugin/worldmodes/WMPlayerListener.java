@@ -63,7 +63,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     }
 
     private void checkWorldTransition(final PlayerMoveEvent event) {
-        if (event.isCancelled() || event.getFrom().getWorld().equals(event.getTo().getWorld())) {
+        if (event.isCancelled()) {
             return;
         }
 
