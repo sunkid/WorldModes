@@ -38,22 +38,24 @@ import com.iminurnetz.bukkit.plugin.BukkitPlugin;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
 public class WorldModesPlugin extends BukkitPlugin {
-    public int MIN_SERVER_VERSION = 1031;
     private PermissionHandler permissionHandler;
-
-    @Override
-    public int getMinimumServerVersion() {
-        return this.MIN_SERVER_VERSION;
-    }
 
     @Override
     public void enablePlugin() throws Exception {
         PluginManager pm = getServer().getPluginManager();
         permissionHandler = PermissionHandlerService.getHandler(this);
+
         WMPlayerListener listener = new WMPlayerListener(this, permissionHandler);
+
         pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, listener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_DROP_ITEM, listener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_INTERACT, listener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_INTERACT_ENTITY, listener, Priority.Lowest, this);
+
         pm.registerEvent(Type.PLAYER_PORTAL, listener, Priority.Monitor, this);
         pm.registerEvent(Type.PLAYER_TELEPORT, listener, Priority.Monitor, this);
+
+        pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, new GameModeChangePlayerListener(this, permissionHandler), Priority.Monitor, this);
     }
 
     @Override

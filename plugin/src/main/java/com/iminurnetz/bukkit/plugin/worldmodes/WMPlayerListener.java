@@ -23,16 +23,28 @@
  */
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.StorageMinecart;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInventoryEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
+import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
 public class WMPlayerListener extends PlayerListener implements Listener {
     private static final String PERMISSION_PREFIX = "worldmodes.";
@@ -42,6 +54,46 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     public WMPlayerListener(WorldModesPlugin plugin, PermissionHandler permissionHandler) {
         this.permissionHandler = permissionHandler;
         this.plugin = plugin;
+    }
+
+    @Override
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (checkDropPermission(event)) {
+            MessageUtils.send(event.getPlayer(), ChatColor.RED, "You are not allowed to drop items!");
+        }
+    }
+
+    @Override
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        Block block = event.getClickedBlock();
+        if (block == null || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        
+        if (block.getType() == Material.CHEST || block.getType() == Material.DISPENSER) {
+            if (checkDropPermission(event)) {
+                MessageUtils.send(event.getPlayer(), ChatColor.RED, "You are not allowed to use chests or dispensers!");
+            }
+        }
+    }
+
+    @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked() instanceof StorageMinecart) {
+            if (checkDropPermission(event)) {
+                MessageUtils.send(event.getPlayer(), ChatColor.RED, "You are not allowed to use chests or dispensers!");
+            }
+        }
+    }
+
+    private boolean checkDropPermission(PlayerEvent event) {
+        Player player = event.getPlayer();
+        if (player.getGameMode() == GameMode.CREATIVE && !permissionHandler.hasPermission(player, "worldmodes.drop")) {
+            ((Cancellable) event).setCancelled(true);
+            return true;
+        }
+
+        return false;
     }
 
     @Override

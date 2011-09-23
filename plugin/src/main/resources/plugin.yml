@@ -35,11 +35,13 @@ commands:
 
 permissions:
     worldmodes.*:
-        description: Players can be in either mode and can set their own modes or that of other players.
+        description: Players can do anything in either mode and can set their own modes or that of other players.
         children:
             worldmodes.set.*: true
             worldmodes.survival: true
             worldmodes.creative: true
+            worldmodes.drop: true
+            worldmodes.keep-inventory: true
 
     worldmodes.set.*: 
         description: Players can set their own modes or that of other players.
@@ -55,6 +57,12 @@ permissions:
 
     worldmodes.survival:
         description: Players are only allowed to be in survival mode
-        
+
     worldmodes.creative:
         description: Players are only allowed to be in creative mode
+
+    worldmodes.drop:
+        description: Allows a player in creative mode to drop items
+
+    worldmodes.keep-inventory:
+        description: Allows a player to keep their inventory when switching out of creative mode
