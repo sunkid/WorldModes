@@ -37,7 +37,7 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerInventoryEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
@@ -54,6 +54,14 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     public WMPlayerListener(WorldModesPlugin plugin, PermissionHandler permissionHandler) {
         this.permissionHandler = permissionHandler;
         this.plugin = plugin;
+    }
+
+    @Override
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (!hasPermission(player, player.getGameMode())) {
+            player.setGameMode(plugin.getToggledMode(player));
+        }
     }
 
     @Override
@@ -124,8 +132,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
                 Player player = event.getPlayer();
                 GameMode mode = player.getGameMode();
                 if (!hasPermission(player, mode)) {
-                    GameMode newMode = plugin.getToggledMode(player);
-                    player.setGameMode(newMode);
+                    player.setGameMode(plugin.getToggledMode(player));
                 }
             }
         }, 1);
