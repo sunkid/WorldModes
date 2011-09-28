@@ -106,7 +106,13 @@ public class WorldModesPlugin extends BukkitPlugin {
                     return true;
                 }
             } else if (targetPlayer != null) {
-                String group = permissionHandler.getGroup(targetPlayer).toLowerCase();
+                String group = permissionHandler.getGroup(targetPlayer);
+                if (group != null) {
+                    group = group.toLowerCase();
+                } else {
+                    group = "others";
+                }
+
                 if (!permissionHandler.hasPermission(player, "worldmodes.set.others") && !permissionHandler.hasPermission(player, "worldmodes.set." + group)) {
                     MessageUtils.send(sender, ChatColor.RED, "You are not permitted to change " + player.getName() + "'s game mode!");
                     return true;

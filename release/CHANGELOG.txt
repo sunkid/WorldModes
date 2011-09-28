@@ -1,6 +1,10 @@
 Listed below are released versions and cumulative changes between them
 
-1.4
+1.5.1
+1.5.1
+
+* fixed NPE when player does not belong to group
+
 1.5
 
 * added check for game mode permissions when joining a server
