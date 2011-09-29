@@ -4,7 +4,7 @@
   <groupId>com.iminurnetz</groupId>
   <artifactId>bukkit.worldmodes-plugin</artifactId>
   <name>WorldModes</name>
-  <version>1.5.1</version>
+  <version>1.5.2</version>
   <packaging>jar</packaging>
   <description>A world-specific game mode setting plugin for Bukkit servers</description>
   <parent>

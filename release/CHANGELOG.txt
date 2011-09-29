@@ -1,6 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
-1.5.1
+1.5.2
+
+* fixed spurious NPE on server start-up
+
 1.5.1
 
 * fixed NPE when player does not belong to group

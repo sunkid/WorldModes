@@ -131,7 +131,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
             public void run() {
                 Player player = event.getPlayer();
                 GameMode mode = player.getGameMode();
-                if (!hasPermission(player, mode)) {
+                if (mode != null && !hasPermission(player, mode)) {
                     player.setGameMode(plugin.getToggledMode(player));
                 }
             }
