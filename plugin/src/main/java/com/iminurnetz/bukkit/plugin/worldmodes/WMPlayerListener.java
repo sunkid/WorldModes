@@ -61,6 +61,8 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (!hasPermission(player, player.getGameMode())) {
             player.setGameMode(plugin.getToggledMode(player));
+        } else {
+            checkAndSetDefaultMode(player);
         }
     }
 
@@ -131,8 +133,11 @@ public class WMPlayerListener extends PlayerListener implements Listener {
             public void run() {
                 Player player = event.getPlayer();
                 GameMode mode = player.getGameMode();
+                // null checks on mode are to prevent spurious errors on start-up
                 if (mode != null && !hasPermission(player, mode)) {
                     player.setGameMode(plugin.getToggledMode(player));
+                } else if (mode != null) {
+                    checkAndSetDefaultMode(player);
                 }
             }
         }, 1);
@@ -141,5 +146,13 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     private boolean hasPermission(Player player, GameMode mode) {
         String permission = PERMISSION_PREFIX + mode.name().toLowerCase();
         return permissionHandler.hasPermission(player, permission);
+    }
+
+    private void checkAndSetDefaultMode(Player player) {
+        if (permissionHandler.hasPermission(player, "worldmodes.autoset.survival") && !permissionHandler.hasPermission(player, "worldmodes.autoset.creative")) {
+            player.setGameMode(GameMode.SURVIVAL);
+        } else if (!permissionHandler.hasPermission(player, "worldmodes.autoset.survival") && permissionHandler.hasPermission(player, "worldmodes.autoset.creative")) {
+            player.setGameMode(GameMode.CREATIVE);
+        }
     }
 }

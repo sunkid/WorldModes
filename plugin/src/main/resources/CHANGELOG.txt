@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* added ability to set a default game mode even for players that can switch between them
+
+1.5.2
+
 * fixed spurious NPE on server start-up
 
 1.5.1

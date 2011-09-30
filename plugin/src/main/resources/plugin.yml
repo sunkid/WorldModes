@@ -66,3 +66,9 @@ permissions:
 
     worldmodes.keep-inventory:
         description: Allows a player to keep their inventory when switching out of creative mode
+
+    worldmodes.autoset.survival:
+        description: Sets a player's game mode automatically to survival mode
+
+    worldmodes.autoset.creative:
+        description: Sets a player's game mode automatically to creative mode
