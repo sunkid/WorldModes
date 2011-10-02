@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+1.6.1
+
+* minor improvement to default game mode handling
+
 1.6
 
 * added ability to set a default game mode even for players that can switch between them

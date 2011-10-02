@@ -149,10 +149,15 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     }
 
     private void checkAndSetDefaultMode(Player player) {
+        GameMode mode = player.getGameMode();
         if (permissionHandler.hasPermission(player, "worldmodes.autoset.survival") && !permissionHandler.hasPermission(player, "worldmodes.autoset.creative")) {
-            player.setGameMode(GameMode.SURVIVAL);
+            mode = GameMode.SURVIVAL;
         } else if (!permissionHandler.hasPermission(player, "worldmodes.autoset.survival") && permissionHandler.hasPermission(player, "worldmodes.autoset.creative")) {
-            player.setGameMode(GameMode.CREATIVE);
+            mode = GameMode.CREATIVE;
+        }
+
+        if (player.getGameMode() != mode) {
+            player.setGameMode(mode);
         }
     }
 }
