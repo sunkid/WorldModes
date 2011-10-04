@@ -32,6 +32,7 @@ import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -115,32 +116,15 @@ public class WMPlayerListener extends PlayerListener implements Listener {
     }
 
     @Override
-    public void onPlayerPortal(PlayerPortalEvent event) {
-        checkWorldTransition(event);
-    }
-
-    @Override
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        checkWorldTransition(event);
-    }
-
-    private void checkWorldTransition(final PlayerMoveEvent event) {
-        if (event.isCancelled()) {
-            return;
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        GameMode mode = player.getGameMode();
+        // null checks on mode are to prevent spurious errors on start-up
+        if (mode != null && !hasPermission(player, mode)) {
+            player.setGameMode(plugin.getToggledMode(player));
+        } else if (mode != null) {
+            checkAndSetDefaultMode(player);
         }
-
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-            public void run() {
-                Player player = event.getPlayer();
-                GameMode mode = player.getGameMode();
-                // null checks on mode are to prevent spurious errors on start-up
-                if (mode != null && !hasPermission(player, mode)) {
-                    player.setGameMode(plugin.getToggledMode(player));
-                } else if (mode != null) {
-                    checkAndSetDefaultMode(player);
-                }
-            }
-        }, 1);
     }
 
     private boolean hasPermission(Player player, GameMode mode) {

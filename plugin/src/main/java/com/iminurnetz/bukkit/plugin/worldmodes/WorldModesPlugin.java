@@ -53,8 +53,7 @@ public class WorldModesPlugin extends BukkitPlugin {
         pm.registerEvent(Type.PLAYER_INTERACT_ENTITY, listener, Priority.Lowest, this);
 
         pm.registerEvent(Type.PLAYER_JOIN, listener, Priority.Monitor, this);
-        pm.registerEvent(Type.PLAYER_PORTAL, listener, Priority.Monitor, this);
-        pm.registerEvent(Type.PLAYER_TELEPORT, listener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_CHANGED_WORLD, listener, Priority.Monitor, this);
 
         pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, new GameModeChangePlayerListener(this, permissionHandler), Priority.Monitor, this);
     }
