@@ -30,6 +30,9 @@ import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
 import org.bukkit.plugin.PluginManager;
 
+import ru.tehkode.permissions.PermissionManager;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 import com.iminurnetz.bukkit.plugin.BukkitPlugin;
 import com.iminurnetz.bukkit.plugin.util.PluginLogger;
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -58,6 +61,14 @@ public class PermissionHandlerService {
 			NijikokunPermissions np = new NijikokunPermissions();
 			np.setHandler(p.getHandler());
 			handler = np;
+        } else if (pm.getPlugin("PermissionsEx") != null) {
+            log.log(Level.INFO, "Using PermissionsEx' permissions");
+            PermissionsEx p = (PermissionsEx) pm.getPlugin("PermissionsEx");
+            pm.enablePlugin(p);
+            PermissionManager m = PermissionsEx.getPermissionManager();
+            PermissionsExPermissions pex = new PermissionsExPermissions();
+            pex.setHandler(m);
+            handler = pex;
 		} else {
 			handler = getHandler(false);
 		}

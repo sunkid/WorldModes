@@ -1,6 +1,6 @@
 Listed below are released versions and cumulative changes between them
 
-1.5
+1.6
 
 * added support for bukkit permissions
 

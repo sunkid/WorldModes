@@ -5,7 +5,7 @@
 	<groupId>com.iminurnetz</groupId>
 	<artifactId>bukkit.basebukkitplugin</artifactId>
 	<name>BaseBukkitPlugin</name>
-	<version>1.5</version>
+	<version>1.6</version>
 	<parent>
 		<groupId>com.iminurnetz</groupId>
 		<artifactId>bukkit.plugin-parent</artifactId>
@@ -47,6 +47,11 @@
 			<groupId>org.bukkit</groupId>
 			<artifactId>permissions</artifactId>
 			<version>2.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.tehkode</groupId>
+			<artifactId>PermissionsEx</artifactId>
+			<version>1.14</version>
 		</dependency>
 	</dependencies>
 	<build>
