@@ -5,7 +5,7 @@
 	<groupId>com.iminurnetz</groupId>
 	<artifactId>bukkit.basebukkitplugin</artifactId>
 	<name>BaseBukkitPlugin</name>
-	<version>1.5</version>
+	<version>1.6</version>
 	<packaging>jar</packaging>
 	<description>Basic classes for use with plugins for bukkit servers</description>
 	<properties>
@@ -42,6 +42,11 @@
 			<artifactId>permissions</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+        <dependency>
+            <groupId>ru.tehkode</groupId>
+            <artifactId>PermissionsEx</artifactId>
+            <version>1.14</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.name}-${project.version}-b${buildNumber}</finalName>
