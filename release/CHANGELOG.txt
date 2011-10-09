@@ -1,5 +1,10 @@
 Listed below are released versions and cumulative changes between them
 
+1.8
+
+* fixed NPE when restoring armor
+* changed worldmodes.{creative,survival} to worldmodes.mode.{creative,survival}
+
 1.7
 
 * minor improvement to default game mode handling

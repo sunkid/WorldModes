@@ -48,7 +48,7 @@ import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
 public class WMPlayerListener extends PlayerListener implements Listener {
-    private static final String PERMISSION_PREFIX = "worldmodes.";
+    private static final String PERMISSION_PREFIX = "worldmodes.mode.";
     private final WorldModesPlugin plugin;
     private final PermissionHandler permissionHandler;
 

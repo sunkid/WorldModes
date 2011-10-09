@@ -74,7 +74,7 @@ public class PersistedInventory implements Serializable {
             if (armor.get(n) == null) {
                 armorContent[n] = new ItemStack(0);
             } else {
-                armorContent[n] = inventory.get(n).getStack();
+                armorContent[n] = armor.get(n).getStack();
             }
         }
         player.getInventory().setArmorContents(armorContent);
