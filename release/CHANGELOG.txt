@@ -1,6 +1,10 @@
 Listed below are released versions and cumulative changes between them
 
-1.8
+2.0
+
+* added monitoring of PLAYER_RESPAWN
+
+1.9
 
 * fixed NPE when restoring armor
 * changed worldmodes.{creative,survival} to worldmodes.mode.{creative,survival}

@@ -40,9 +40,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
@@ -59,12 +57,17 @@ public class WMPlayerListener extends PlayerListener implements Listener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if (!hasPermission(player, player.getGameMode())) {
-            player.setGameMode(plugin.getToggledMode(player));
-        } else {
-            checkAndSetDefaultMode(player);
-        }
+        controlGameMode(event);
+    }
+
+    @Override
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        controlGameMode(event);
+    }
+
+    @Override
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        controlGameMode(event);
     }
 
     @Override
@@ -115,14 +118,17 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         }
     }
 
-    @Override
-    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+    private void controlGameMode(PlayerEvent event) {
         Player player = event.getPlayer();
         GameMode mode = player.getGameMode();
-        // null checks on mode are to prevent spurious errors on start-up
-        if (mode != null && !hasPermission(player, mode)) {
+
+        if (mode == null) {
+            return;
+        }
+
+        if (!hasPermission(player, mode)) {
             player.setGameMode(plugin.getToggledMode(player));
-        } else if (mode != null) {
+        } else {
             checkAndSetDefaultMode(player);
         }
     }
