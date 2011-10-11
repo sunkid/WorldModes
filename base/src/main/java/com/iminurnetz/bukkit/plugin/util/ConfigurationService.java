@@ -24,24 +24,20 @@
 package com.iminurnetz.bukkit.plugin.util;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
+import java.util.Set;
 import java.util.logging.Level;
 
-import org.bukkit.util.config.Configuration;
-import org.bukkit.util.config.ConfigurationNode;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import com.iminurnetz.bukkit.plugin.BukkitPlugin;
 
 public class ConfigurationService {
 
 	private static final String CONFIG_FILE = "config.yml";
+    private FileConfiguration config;
 	
 	private final BukkitPlugin plugin;
-	private final String lastChangedInVersion;
+    private final double lastChangedInVersion;
 
 	// global settings
 	public static final String SETTINGS_TAG = "settings";
@@ -51,7 +47,7 @@ public class ConfigurationService {
 	public static final boolean IS_ENABLED = false;
 	public static final boolean DEBUG = false;
 
-	public ConfigurationService(BukkitPlugin plugin, String lastChangedInVersion) {
+    public ConfigurationService(BukkitPlugin plugin, double lastChangedInVersion) {
 		this.plugin = plugin;
 		this.lastChangedInVersion = lastChangedInVersion;
 		load();
@@ -67,60 +63,22 @@ public class ConfigurationService {
 	/**
 	 * @return the lastChangedInVersion
 	 */
-	public String getLastChangedInVersion() {
+    public double getLastChangedInVersion() {
 		return lastChangedInVersion;
 	}
 
 	protected void load() {
-		File dir = getPlugin().getDataFolder();
+        File configFile = getPlugin().getDataFile(CONFIG_FILE);
+        if (!configFile.exists()) {
+            getPlugin().writeResourceToDataFolder(CONFIG_FILE);
+        }
 		
-		Configuration config = getPlugin().getConfiguration();
-		config.load();
-		
-		// we are relying on a value that is always set
-		ConfigurationNode settings = config.getNode(SETTINGS_TAG);
-		
-		if (settings == null) {
-			dir.mkdirs();
-			generateDefaultConfig(dir);
-		} else // check if there was an update to the config file/parameters
-		if (!config.getString(SETTINGS_TAG + ".version", "").equals(getLastChangedInVersion())) {
-			getPlugin().log(Level.WARNING, "Your configuration file is outdated, please read config-new.yml");
-			URL shipped = getClass().getResource("/" + CONFIG_FILE);
-			byte[] buf = new byte[1024];
-			int len;
-			try {
-				InputStream in = shipped.openStream();
-				OutputStream out = new FileOutputStream(new File(dir, "config-new.yml"));
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				in.close();
-				out.close();
-			} catch (Exception e) {
-				getPlugin().getLogger().log(Level.SEVERE, "Cannot generate config-new.file file", e);
-			}
-		}
-	}
-
-	private void generateDefaultConfig(File dir) {
-		// use the default configuration file shipped with the jar
-		URL defCon = getClass().getResource("/" + CONFIG_FILE);
-		byte[] buf = new byte[1024];
-		int len;
-		try {
-			InputStream in = defCon.openStream();
-			OutputStream out = new FileOutputStream(new File(getPlugin().getDataFolder(), CONFIG_FILE));
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-			
-		} catch (IOException e) {
-			plugin.getLogger().log(Level.SEVERE, "Cannot generate config file", e);
-		}	
-		getPlugin().getConfiguration().load();
+        config = getPlugin().getConfig();
+        double version = config.getDouble(SETTINGS_TAG + ".version", -1);
+        if (version != getLastChangedInVersion()) {
+            getPlugin().log(Level.WARNING, "Your configuration file is outdated (" + version + " vs. " + getLastChangedInVersion() + "), please read config-new.yml");
+            getPlugin().writeResourceToDataFolder(CONFIG_FILE, "config-new.yml");
+        }
 	}
 
 	public boolean isEnabled() {
@@ -136,7 +94,7 @@ public class ConfigurationService {
 	}
 	
 	public boolean getSettingsAsBoolean(String setting, boolean defaultBool) {
-		return getPlugin().getConfiguration().getBoolean(SETTINGS_TAG + "." + setting, defaultBool);
+        return config.getBoolean(SETTINGS_TAG + "." + setting, defaultBool);
 	}
 
 	public boolean getUserSettingsAsBoolean(String setting) {
@@ -144,7 +102,7 @@ public class ConfigurationService {
 	}
 	
 	public boolean getUserSettingsAsBoolean(String setting, boolean defaultBool) {
-		return getPlugin().getConfiguration().getBoolean(USER_SETTINGS_TAG + "." + setting, defaultBool);
+        return config.getBoolean(USER_SETTINGS_TAG + "." + setting, defaultBool);
 	}
 
 	public int getSettingsAsInt(String setting) {
@@ -152,7 +110,7 @@ public class ConfigurationService {
 	}
 	
 	public int getSettingsAsInt(String setting, int defaultInt) {
-		return getPlugin().getConfiguration().getInt(SETTINGS_TAG + "." + setting, defaultInt);
+        return config.getInt(SETTINGS_TAG + "." + setting, defaultInt);
 	}
 
 	public int getUserSettingsAsInt(String setting) {
@@ -160,7 +118,7 @@ public class ConfigurationService {
 	}
 	
 	public int getUserSettingsAsInt(String setting, int defaultInt) {
-		return getPlugin().getConfiguration().getInt(USER_SETTINGS_TAG + "." + setting, defaultInt);
+        return config.getInt(USER_SETTINGS_TAG + "." + setting, defaultInt);
 	}
 
 	public String getSettings(String setting) {
@@ -168,6 +126,14 @@ public class ConfigurationService {
 	}
 
 	public String getSettings(String setting, String defaultString) {
-		return getPlugin().getConfiguration().getString(SETTINGS_TAG + "." + setting, defaultString);
+        return config.getString(SETTINGS_TAG + "." + setting, defaultString);
 	}
+
+    public FileConfiguration getConfiguration() {
+        return config;
+    }
+
+    public Set<String> getConfigurationNodes(String path) {
+        return config.getConfigurationSection(path).getValues(false).keySet();
+    }
 }

@@ -5,7 +5,7 @@
 	<groupId>com.iminurnetz</groupId>
 	<artifactId>bukkit.basebukkitplugin</artifactId>
 	<name>BaseBukkitPlugin</name>
-	<version>1.6</version>
+	<version>1.7</version>
 	<parent>
 		<groupId>com.iminurnetz</groupId>
 		<artifactId>bukkit.plugin-parent</artifactId>

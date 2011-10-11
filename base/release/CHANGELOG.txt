@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+1.7
+
+* changes to adopt bukkit's new configurations
+
 1.6
 
 * added support for bukkit permissions
