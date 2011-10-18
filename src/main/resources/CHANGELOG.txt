@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* added ability to do a version check and download latest release
+
+1.7
+
 * changes to adopt bukkit's new configurations
 
 1.6

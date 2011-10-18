@@ -1,0 +1,40 @@
+Aliases:
+    Item:
+        pickaxe:
+        - WOOD_PICKAXE
+        - STONE_PICKAXE
+        - IRON_PICKAXE
+        - GOLD_PICKAXE
+        - DIAMOND_PICKAXE
+        spade:
+        - WOOD_SPADE
+        - STONE_SPADE
+        - IRON_SPADE
+        - GOLD_SPADE
+        - DIAMOND_SPADE
+        hoe:
+        - WOOD_HOE
+        - STONE_HOE
+        - IRON_HOE
+        - GOLD_HOE
+        - DIAMOND_HOE
+        axe:
+        - WOOD_AXE
+        - STONE_AXE
+        - IRON_AXE
+        - GOLD_AXE
+        - DIAMOND_AXE
+        sword:
+        - WOOD_SWORD
+        - STONE_SWORD
+        - IRON_SWORD
+        - GOLD_SWORD
+        - DIAMOND_SWORD
+Damage:
+    - 'if target.haspermission.baker.torch and target.wielding.TORCH':
+    - 'if binom.33':
+    - 'attackereffect.addfireticks': '15'
+Death:
+Food:
+debugging: Verbose
+Spawn:
