@@ -25,6 +25,7 @@
 				<include>**/UnsupportedServerVersionException*.class</include>
 				<include>**/MessageUtils*.class</include>
 				<include>**/PluginLogger*.class</include>
+				<include>**/DownloadUtils*.class</include>
 			</includes>
 		</fileSet>
 	</fileSets>

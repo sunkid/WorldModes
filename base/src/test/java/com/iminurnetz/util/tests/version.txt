@@ -1,4 +1,0 @@
-project=VersionTest
-version=1.0
-minor_version=12345
-build_date=2011/03/05 09:19

@@ -28,23 +28,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 import com.iminurnetz.bukkit.plugin.util.PluginLogger;
+import com.iminurnetz.util.DownloadUtils;
 
 public abstract class BukkitPlugin extends JavaPlugin {
-	protected PluginLogger logger;
+	private static final String BASE_BUKKIT_PLUGIN = "BaseBukkitPlugin";
+
+    protected PluginLogger logger;
 
 	protected int MIN_SERVER_VERSION = 400;
 	protected int MAX_SERVER_VERSION = Integer.MAX_VALUE;
 
     private PluginDescriptionFile description;
+
+    public static final String REPOSITORY = "https://raw.github.com/sunkid/BaseBukkitPlugin/master/release/";
 
 	public BukkitPlugin() {
         try {
@@ -53,9 +63,9 @@ public abstract class BukkitPlugin extends JavaPlugin {
         } catch (InvalidDescriptionException e) {
             e.printStackTrace();
         }
-
+        
         logger = new PluginLogger(this);
-		logger.log("initialized");
+        logger.log("initialized");
 	}
 	
 	public PluginLogger getLogger() {
@@ -145,14 +155,68 @@ public abstract class BukkitPlugin extends JavaPlugin {
                 log("Server version compatibility check succeeded");
             }
 
+            if (getServer().getPluginManager().getPlugin(BASE_BUKKIT_PLUGIN) == null) {
+                updateAndLoadBaseBukkitPlugin();
+            }
+
             enablePlugin();
+
         } catch (Exception e) {
             log("Error enabling! ABORTED", e);
             this.setEnabled(false);
         }
 	}
 	
-	protected int getMinimumServerVersion() { return MIN_SERVER_VERSION; }
+    public void updateAndLoadBaseBukkitPlugin() throws Exception {
+        logger.log("BaseBukkitPlugin version check...");
+
+        Plugin plugin;
+
+        File dataFolder = getDataFolder();
+        if (!dataFolder.exists()) {
+            dataFolder.mkdirs();
+        }
+
+        File pFile = new File(dataFolder, BASE_BUKKIT_PLUGIN + ".jar");
+
+        String baseVersion = "0";
+
+        if (pFile.exists()) {
+            JarFile jarFile = new JarFile(pFile);
+            JarEntry entry = jarFile.getJarEntry("plugin.yml");
+            InputStream stream = jarFile.getInputStream(entry);
+
+            PluginDescriptionFile desc = new PluginDescriptionFile(stream);
+            baseVersion = desc.getVersion();
+            stream.close();
+            jarFile.close();
+        }
+
+        PluginManager pm = getServer().getPluginManager();
+
+        String latestVersion = getLatestVersionFromRepository();
+
+        if (!latestVersion.equals(baseVersion)) {
+            logger.log("Downloading latest version " + latestVersion);
+
+            URL jarUrl = new URL(REPOSITORY + BASE_BUKKIT_PLUGIN + ".jar");
+            DownloadUtils.download(logger, jarUrl, pFile);
+        }
+
+        plugin = pm.loadPlugin(pFile);
+        pm.enablePlugin(plugin);
+
+    }
+
+    public static String getLatestVersionFromRepository() throws IOException {
+        URL versionUrl = new URL(REPOSITORY + "version.txt");
+        String latestVersion = DownloadUtils.readURL(versionUrl);
+        return latestVersion.trim();
+    }
+
+    protected int getMinimumServerVersion() {
+        return MIN_SERVER_VERSION;
+    }
     protected int getMaximumServerVersion() { return MAX_SERVER_VERSION; }
     
     /**
