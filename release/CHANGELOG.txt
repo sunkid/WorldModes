@@ -1,5 +1,11 @@
 Listed below are released versions and cumulative changes between them
 
+2.2
+
+* upgraded to BaseBukkitPlugin version 1.9, which adds the following:
+** implemented time stamp to avoid pinging for a new version too frequently
+** enabled the collection of anonymous usage statistics
+
 2.1
 
 * adapted to BaseBukkitPlugin version 1.8 - there is no need to install that jar manually anymore
