@@ -23,17 +23,23 @@
  */
 package com.iminurnetz.bukkit.plugin;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -53,6 +59,8 @@ public abstract class BukkitPlugin extends JavaPlugin {
 	protected int MAX_SERVER_VERSION = Integer.MAX_VALUE;
 
     private PluginDescriptionFile description;
+
+    private static final String HOME_URL = "http://www.iminurnetz.com/mcStats.cgi";
 
     public static final String REPOSITORY = "https://raw.github.com/sunkid/BaseBukkitPlugin/master/release/";
 
@@ -155,11 +163,23 @@ public abstract class BukkitPlugin extends JavaPlugin {
                 log("Server version compatibility check succeeded");
             }
 
-            if (getServer().getPluginManager().getPlugin(BASE_BUKKIT_PLUGIN) == null) {
+            boolean isNotBaseBukkitPlugin = getServer().getPluginManager().getPlugin(BASE_BUKKIT_PLUGIN) == null;
+            if (isNotBaseBukkitPlugin) {
                 updateAndLoadBaseBukkitPlugin();
             }
 
             enablePlugin();
+
+            if (isNotBaseBukkitPlugin) {
+                Configuration config = getConfig();
+                if (!config.getBoolean("settings.disable-stats", false)) {
+                    getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+                        public void run() {
+                            postUsage();
+                        }
+                    });
+                }
+            }
 
         } catch (Exception e) {
             log("Error enabling! ABORTED", e);
@@ -167,14 +187,52 @@ public abstract class BukkitPlugin extends JavaPlugin {
         }
 	}
 	
-    public void updateAndLoadBaseBukkitPlugin() throws Exception {
-        logger.log("BaseBukkitPlugin version check...");
+    protected void postUsage() {
+        log("Sending anonymous usage data...");
+        log("This can be disabled by setting 'settings.disable-stats' to true in config.yml");
 
+        HashMap<String, String> values = new HashMap<String, String>();
+        String ip = getServer().getIp();
+        if (ip.equals("")) {
+            ip = "*";
+        }
+
+        values.put("ip", ip);
+        values.put("port", String.valueOf(getServer().getPort()));
+        values.put("plugin", getName());
+        values.put("version", getVersion());
+
+        try {
+            log(DownloadUtils.post(HOME_URL, values));
+        } catch (IOException e) {
+            // ignored
+        }
+    }
+
+    public void updateAndLoadBaseBukkitPlugin() throws Exception {
         Plugin plugin;
 
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
+        }
+
+        File timeStamp = new File(dataFolder, "lastVersionCheck.txt");
+        boolean checkServer = true;
+        if (!timeStamp.exists()) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(timeStamp));
+                out.write("remove this file to force the version check for BaseBukkitPlugin\n");
+                out.close();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Cannot create time stamp", e);
+            }
+        } else {
+            Date lastModified = new Date(timeStamp.lastModified());
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DATE, -1);
+            
+            checkServer = lastModified.before(yesterday.getTime());
         }
 
         File pFile = new File(dataFolder, BASE_BUKKIT_PLUGIN + ".jar");
@@ -190,22 +248,34 @@ public abstract class BukkitPlugin extends JavaPlugin {
             baseVersion = desc.getVersion();
             stream.close();
             jarFile.close();
+        } else {
+            checkServer = true;
         }
 
         PluginManager pm = getServer().getPluginManager();
 
-        String latestVersion = getLatestVersionFromRepository();
+        if (checkServer) {
+            logger.log("BaseBukkitPlugin version check...");
 
-        if (!latestVersion.equals(baseVersion)) {
-            logger.log("Downloading latest version " + latestVersion);
+            String latestVersion = getLatestVersionFromRepository();
 
-            URL jarUrl = new URL(REPOSITORY + BASE_BUKKIT_PLUGIN + ".jar");
-            DownloadUtils.download(logger, jarUrl, pFile);
+            if (!latestVersion.equals(baseVersion)) {
+                logger.log("Latest version " + latestVersion + " is newer than the installed version " + baseVersion);
+                URL jarUrl = new URL(REPOSITORY + BASE_BUKKIT_PLUGIN + ".jar");
+                DownloadUtils.download(logger, jarUrl, pFile);
+            }
         }
 
         plugin = pm.loadPlugin(pFile);
         pm.enablePlugin(plugin);
 
+        try {
+            if (!timeStamp.setLastModified((new Date()).getTime())) {
+                throw new Exception("Setting last modified time stamp did not succeed!");
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Cannot update time stamp", e);
+        }
     }
 
     public static String getLatestVersionFromRepository() throws IOException {
@@ -217,14 +287,9 @@ public abstract class BukkitPlugin extends JavaPlugin {
     protected int getMinimumServerVersion() {
         return MIN_SERVER_VERSION;
     }
+
     protected int getMaximumServerVersion() { return MAX_SERVER_VERSION; }
     
-    /**
-     * This method will be called when the onEnable() method is called.
-     * @throws Exception 
-     */
-    public abstract void enablePlugin() throws Exception;
-
     public void writeResourceToDataFolder(String in) {
         writeResourceToDataFolder(in, in);
     }
@@ -259,4 +324,11 @@ public abstract class BukkitPlugin extends JavaPlugin {
     public File getDataFile(String name) {
         return new File(getDataFolder(), name);
     }
+
+    /**
+     * This method will be called when the onEnable() method is called.
+     * 
+     * @throws Exception
+     */
+    public abstract void enablePlugin() throws Exception;
 }

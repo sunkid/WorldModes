@@ -31,7 +31,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.HashMap;
 
 import com.iminurnetz.bukkit.plugin.util.PluginLogger;
 
@@ -83,5 +87,33 @@ public class DownloadUtils {
             content.append(inputLine);
         in.close();
         return content.toString();
+    }
+
+    public static String post(String urlString, HashMap<String, String> values) throws IOException {
+        StringBuffer retval = new StringBuffer();
+        URL url = new URL(urlString);
+
+        StringBuffer data = new StringBuffer();
+        for (String key : values.keySet()) {
+            data.append(URLEncoder.encode(key, "UTF-8") + "=");
+            data.append(URLEncoder.encode(values.get(key), "UTF-8") + "&");
+        }
+
+        URLConnection conn = url.openConnection();
+        conn.setDoOutput(true);
+
+        OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+        osw.write(data.substring(0, data.length() - 1));
+        osw.flush();
+
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            retval.append(line);
+        }
+        osw.close();
+        rd.close();
+
+        return retval.toString();
     }
 }
