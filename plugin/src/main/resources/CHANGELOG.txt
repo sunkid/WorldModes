@@ -2,6 +2,12 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* adapted to BaseBukkitPlugin version 1.8 - there is no need to install that jar manually anymore
+* removed PLAYER_RESPAWN listener again... that was silly
+* added ENTITY_DEATH listener to remove persisted inventories
+
+2.0
+
 * added monitoring of PLAYER_RESPAWN
 
 1.9

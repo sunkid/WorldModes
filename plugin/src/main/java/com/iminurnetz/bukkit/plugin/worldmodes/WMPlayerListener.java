@@ -40,7 +40,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
@@ -57,11 +56,6 @@ public class WMPlayerListener extends PlayerListener implements Listener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        controlGameMode(event);
-    }
-
-    @Override
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
         controlGameMode(event);
     }
 

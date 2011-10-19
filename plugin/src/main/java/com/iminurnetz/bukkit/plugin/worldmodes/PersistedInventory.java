@@ -78,5 +78,7 @@ public class PersistedInventory implements Serializable {
             }
         }
         player.getInventory().setArmorContents(armorContent);
+
+        player.updateInventory();
     }
 }

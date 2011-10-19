@@ -70,7 +70,7 @@ public class GameModeChangePlayerListener extends PlayerListener {
 
     private boolean storeInventory(Player player) {
         PersistedInventory inventory = new PersistedInventory(player);
-        File piFile = getPersistedInventoryFile(player);
+        File piFile = plugin.getPersistedInventoryFile(player);
 
         File dataDir = piFile.getParentFile();
         if (!dataDir.exists()) {
@@ -92,7 +92,7 @@ public class GameModeChangePlayerListener extends PlayerListener {
     }
 
     private boolean restoreInventory(Player player) {
-        File piFile = getPersistedInventoryFile(player);
+        File piFile = plugin.getPersistedInventoryFile(player);
         if (!piFile.exists()) {
             return false;
         }
@@ -119,9 +119,5 @@ public class GameModeChangePlayerListener extends PlayerListener {
 
         piFile.delete();
         return true;
-    }
-
-    private File getPersistedInventoryFile(Player player) {
-        return new File(plugin.getDataFolder(), player.getName() + ".ser");
     }
 }

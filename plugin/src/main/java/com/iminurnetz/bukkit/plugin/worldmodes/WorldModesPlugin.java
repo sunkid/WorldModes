@@ -23,6 +23,8 @@
  */
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
+import java.io.File;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -45,16 +47,17 @@ public class WorldModesPlugin extends BukkitPlugin {
         PluginManager pm = getServer().getPluginManager();
         permissionHandler = PermissionHandlerService.getHandler(this);
 
-        WMPlayerListener listener = new WMPlayerListener(this, permissionHandler);
+        WMPlayerListener playerListener = new WMPlayerListener(this, permissionHandler);
+        WMEntityListener entityListener = new WMEntityListener(this);
 
-        pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, listener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_DROP_ITEM, listener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_INTERACT, listener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_INTERACT_ENTITY, listener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, playerListener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_DROP_ITEM, playerListener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Lowest, this);
+        pm.registerEvent(Type.PLAYER_INTERACT_ENTITY, playerListener, Priority.Lowest, this);
 
-        pm.registerEvent(Type.PLAYER_JOIN, listener, Priority.Monitor, this);
-        pm.registerEvent(Type.PLAYER_CHANGED_WORLD, listener, Priority.Monitor, this);
-        pm.registerEvent(Type.PLAYER_RESPAWN, listener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Monitor, this);
+        pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
 
         pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, new GameModeChangePlayerListener(this, permissionHandler), Priority.Monitor, this);
     }
@@ -166,5 +169,9 @@ public class WorldModesPlugin extends BukkitPlugin {
 
     protected GameMode getToggledMode(Player player) {
         return GameMode.getByValue(player.getGameMode().getValue() == 0 ? 1 : 0);
+    }
+
+    File getPersistedInventoryFile(Player player) {
+        return new File(getDataFolder(), player.getName() + ".ser");
     }
 }
