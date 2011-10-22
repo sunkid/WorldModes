@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* upgraded to BaseBukkitPlugin version 2.0 which adds self-update functionality
+
+2.2
+
 * upgraded to BaseBukkitPlugin version 1.9, which adds the following:
 ** implemented time stamp to avoid pinging for a new version too frequently
 ** enabled the collection of anonymous usage statistics
