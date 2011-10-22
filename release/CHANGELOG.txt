@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.3
+
+* upgraded to BaseBukkitPlugin version 2.0 which adds self-update functionality
+
 2.2
 
 * upgraded to BaseBukkitPlugin version 1.9, which adds the following:
