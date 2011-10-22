@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.0
+
+* added self-update methods for plugins
+
 1.9
 
 * implemented time stamp to avoid pinging for a new version too frequently

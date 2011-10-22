@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 public class BukkitPluginSelfUpdateTest extends TestCase {
     public void testDownloadLatestVersion() throws IOException {
-        String version = BukkitPlugin.getLatestVersionFromRepository();
+        String version = BukkitPlugin.getLatestVersionFromRepository("BaseBukkitPlugin");
         double v = Double.valueOf(version);
         assertTrue(v > 1.7);
     }
