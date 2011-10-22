@@ -168,24 +168,16 @@ public abstract class BukkitPlugin extends JavaPlugin {
             if (!getName().equals(BASE_BUKKIT_PLUGIN)) {
                 Configuration config = getConfig();
                 if (!config.getBoolean("settings.disable-stats", false)) {
-                    getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-                        public void run() {
-                            postUsage();
-                        }
-                    });
+                    postUsage();
                 }
 
                 if (!config.getBoolean("settings.disable-updates", false)) {
-                    getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
-                        public void run() {
-                            File jarFile = new File(getDataFolder().getParentFile(), getName() + ".jar");
-                            try {
-                                checkAndUpdateJarFile(jarFile, true);
-                            } catch (Exception e) {
-                                log(Level.SEVERE, "Cannot check for or install latest version", e);
-                            }
-                        }
-                    });
+                    File jarFile = new File(getDataFolder().getParentFile(), getName() + ".jar");
+                    try {
+                        checkAndUpdateJarFile(jarFile, true);
+                    } catch (Exception e) {
+                        log(Level.SEVERE, "Cannot check for or install latest version", e);
+                    }
                 }
             }
 
@@ -250,7 +242,8 @@ public abstract class BukkitPlugin extends JavaPlugin {
             if (!latestVersion.equals(installedVersion)) {
                 log("Latest version " + latestVersion + " is newer than the installed version!");
 
-                // not sure this is necessary, as SimplePluginManager seems to move files automatically
+                // not sure this is necessary, as SimplePluginManager seems to
+                // move files automatically
                 // at least it'll create the folder
                 if (isPlugin) {
                     jarFile = new File(getServer().getUpdateFolderFile(), jarFile.getName());
