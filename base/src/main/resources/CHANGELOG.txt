@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* added self-update methods for plugins
+
+1.9
+
 * implemented time stamp to avoid pinging for a new version too frequently
 * enabled the collection of anonymous usage statistics
 
