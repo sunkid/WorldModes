@@ -25,6 +25,7 @@ package com.iminurnetz.bukkit.plugin;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -151,7 +152,6 @@ public abstract class BukkitPlugin extends JavaPlugin {
         int serverVersion = getServerVersion();
         try {
             if (serverVersion > 0 && (serverVersion < getMinimumServerVersion() || serverVersion > getMaximumServerVersion())) {
-
                 throw new UnsupportedServerVersionException("This plugin only supports server versions " + getMinimumServerVersion() + " to " + getMaximumServerVersion());
             }
 
@@ -159,7 +159,8 @@ public abstract class BukkitPlugin extends JavaPlugin {
                 log("Server version compatibility check succeeded");
             }
 
-            if (getServer().getPluginManager().getPlugin(BASE_BUKKIT_PLUGIN) == null) {
+            PluginManager pm = getServer().getPluginManager();
+            if (pm.getPlugin(BASE_BUKKIT_PLUGIN) == null) {
                 updateAndLoadBaseBukkitPlugin();
             }
 
@@ -210,18 +211,24 @@ public abstract class BukkitPlugin extends JavaPlugin {
     }
 
     public void updateAndLoadBaseBukkitPlugin() throws Exception {
-        Plugin plugin;
-
         File basePluginJarFile = new File(getDataFolder(), BASE_BUKKIT_PLUGIN + ".jar");
-        checkAndUpdateJarFile(basePluginJarFile, false);
+        try {
+            checkAndUpdateJarFile(basePluginJarFile, false);
+        } catch (IOException e) {
+            log(Level.SEVERE, "Cannot check remote or local version of BaseBukkitPlugin!", e);
+            if (!basePluginJarFile.exists()) {
+                throw new FileNotFoundException("Install BaseBukkitPlugin manually into " + basePluginJarFile.getAbsolutePath());
+            } else {
+                log(Level.SEVERE, "Attempting installation from local jar");
+            }
+        }
 
         PluginManager pm = getServer().getPluginManager();
-        plugin = pm.loadPlugin(basePluginJarFile);
+        Plugin plugin = pm.loadPlugin(basePluginJarFile);
         pm.enablePlugin(plugin);
-
     }
 
-    private void checkAndUpdateJarFile(File jarFile, boolean isPlugin) throws Exception {
+    private void checkAndUpdateJarFile(File jarFile, boolean isPlugin) throws IOException {
         boolean checkServer = checkTimeStamp(isPlugin);
 
         String installedVersion = getPluginVersionFromJar(jarFile);
