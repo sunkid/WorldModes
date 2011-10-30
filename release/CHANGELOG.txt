@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.1
+
+* made self-update more fail-safe
+
 2.0
 
 * added self-update methods for plugins
