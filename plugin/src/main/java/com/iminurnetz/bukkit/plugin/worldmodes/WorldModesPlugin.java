@@ -24,14 +24,17 @@
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
 import java.io.File;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
@@ -69,6 +72,15 @@ public class WorldModesPlugin extends BukkitPlugin {
         if (sender instanceof Player) {
             player = (Player) sender;
             senderIsPlayer = true;
+        } else if (args.length == 2 && "check".equals(args[0])) {
+            player = getServer().getPlayer(args[1]);
+            if (player != null) {
+                dumpPermissionsAndMode(sender, player);
+                return true;
+            } else {
+                MessageUtils.send(sender, ChatColor.RED, "You must provide a valid player name!");
+                return false;
+            }
         }
 
         Player targetPlayer = null;
@@ -146,6 +158,20 @@ public class WorldModesPlugin extends BukkitPlugin {
         }
 
         return true;
+    }
+
+    private void dumpPermissionsAndMode(CommandSender sender, Player player) {
+        StringBuilder dump = new StringBuilder();
+        dump.append(ChatColor.GREEN + player.getName() + ChatColor.WHITE + " is currently in " + ChatColor.RED + player.getGameMode() + ChatColor.WHITE + "\n");
+        dump.append("Their permissions in world " + ChatColor.GREEN + player.getWorld().getName() + ChatColor.WHITE + " are as follows:\n");
+
+        for (Permission permission : getDescription().getPermissions()) {
+            dump.append("    " + ChatColor.YELLOW + permission.getName() + ": ");
+            dump.append(permissionHandler.hasPermission(player, permission.getName()) ? ChatColor.GREEN + "TRUE" : ChatColor.RED + "FALSE");
+            dump.append("\n");
+        }
+
+        MessageUtils.send(sender, dump.toString());
     }
 
     private GameMode extractMode(String arg) {

@@ -1,5 +1,10 @@
 Listed below are released versions and cumulative changes between them
 
+2.4
+
+* added command to check a player's WorldModes permissions
+* made self-update more fail-proof
+
 2.3
 
 * upgraded to BaseBukkitPlugin version 2.0 which adds self-update functionality

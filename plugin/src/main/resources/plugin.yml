@@ -25,7 +25,6 @@ main: com.iminurnetz.bukkit.plugin.worldmodes.WorldModesPlugin
 version: ${project.version}
 authors: [sunkid <sunkid@iminurnetz.com>]
 website: https://github.com/sunkid/${project.name}
-depends: [BaseBukkitPlugin]
 
 commands:
     gamemode:
@@ -48,6 +47,18 @@ permissions:
             worldmodes.mode.survival: true
             worldmodes.mode.creative: true
     
+    worldmodes.mode.survival:
+        description: Players are only allowed to be in survival mode
+
+    worldmodes.mode.creative:
+        description: Players are only allowed to be in creative mode
+
+    worldmodes.autoset.survival:
+        description: Sets a player's game mode automatically to survival mode
+
+    worldmodes.autoset.creative:
+        description: Sets a player's game mode automatically to creative mode
+
     worldmodes.set.*: 
         description: Players can set their own modes or that of other players.
         children:
@@ -60,20 +71,9 @@ permissions:
     worldmodes.set.others:
         description: Players can change modes of other players.
 
-    worldmodes.mode.survival:
-        description: Players are only allowed to be in survival mode
-
-    worldmodes.mode.creative:
-        description: Players are only allowed to be in creative mode
-
     worldmodes.drop:
         description: Allows a player in creative mode to drop items
 
     worldmodes.keep-inventory:
         description: Allows a player to keep their inventory when switching out of creative mode
-
-    worldmodes.autoset.survival:
-        description: Sets a player's game mode automatically to survival mode
-
-    worldmodes.autoset.creative:
         description: Sets a player's game mode automatically to creative mode
