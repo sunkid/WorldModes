@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* workaround for PermissionBukkit's maintainer's lazyness
+
+2.4
+
 * added command to check a player's WorldModes permissions
 * made self-update more fail-proof
 

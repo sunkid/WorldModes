@@ -40,6 +40,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
@@ -61,6 +62,9 @@ public class WMPlayerListener extends PlayerListener implements Listener {
 
     @Override
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        // sillyness until SpaceManiac fixes PermissionsBukkit
+        PlayerMoveEvent e = new PlayerMoveEvent(event.getPlayer(), event.getPlayer().getLocation(), event.getPlayer().getLocation());
+        plugin.getServer().getPluginManager().callEvent(e);
         controlGameMode(event);
     }
 

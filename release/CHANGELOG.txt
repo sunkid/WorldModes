@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.5
+
+* workaround for PermissionBukkit's maintainer's lazyness
+
 2.4
 
 * added command to check a player's WorldModes permissions
