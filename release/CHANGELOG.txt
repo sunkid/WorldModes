@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.51
+
+* update for bukkit 1.0.0 RC1
+
 2.5
 
 * workaround for PermissionBukkit's maintainer's lazyness
