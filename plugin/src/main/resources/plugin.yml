@@ -76,4 +76,3 @@ permissions:
 
     worldmodes.keep-inventory:
         description: Allows a player to keep their inventory when switching out of creative mode
-        description: Sets a player's game mode automatically to creative mode
