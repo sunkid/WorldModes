@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.52
+
+* update for bukkit 1.0.1 RC2
+
 2.51
 
 * update for bukkit 1.0.0 RC1
