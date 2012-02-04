@@ -48,13 +48,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
-import com.iminurnetz.bukkit.plugin.util.PluginLogger;
 import com.iminurnetz.util.DownloadUtils;
 
 public abstract class BukkitPlugin extends JavaPlugin {
     private static final String BASE_BUKKIT_PLUGIN = "BaseBukkitPlugin";
-
-    protected PluginLogger logger;
 
     protected int MIN_SERVER_VERSION = 400;
     protected int MAX_SERVER_VERSION = Integer.MAX_VALUE;
@@ -73,17 +70,12 @@ public abstract class BukkitPlugin extends JavaPlugin {
             e.printStackTrace();
         }
 
-        logger = new PluginLogger(this);
-        logger.log("initialized");
-    }
-
-    public PluginLogger getLogger() {
-        return logger;
+        log("initialized");
     }
 
     // simple shortcut
     public void log(String msg) {
-        getLogger().log(msg);
+        getLogger().log(Level.INFO, msg);
     }
 
     // simple shortcut
@@ -144,7 +136,7 @@ public abstract class BukkitPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().log("un-loaded");
+        log("un-loaded");
     }
 
     @Override
@@ -266,7 +258,7 @@ public abstract class BukkitPlugin extends JavaPlugin {
                 }
 
                 URL jarUrl = new URL(getRepository(name) + jarFile.getName());
-                DownloadUtils.download(logger, jarUrl, jarFile);
+                DownloadUtils.download(getLogger(), jarUrl, jarFile);
                 log("The latest version was downloaded to " + jarFile.getAbsolutePath());
                 if (isPlugin) {
                     log("The update will automatically be installed upon the next server restart!");
