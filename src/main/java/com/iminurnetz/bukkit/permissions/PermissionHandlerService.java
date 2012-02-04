@@ -25,6 +25,7 @@
 package com.iminurnetz.bukkit.permissions;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.anjocaido.groupmanager.GroupManager;
 import org.anjocaido.groupmanager.dataholder.worlds.WorldsHolder;
@@ -34,11 +35,10 @@ import ru.tehkode.permissions.PermissionManager;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import com.iminurnetz.bukkit.plugin.BukkitPlugin;
-import com.iminurnetz.bukkit.plugin.util.PluginLogger;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class PermissionHandlerService {
-	private static PluginLogger log;
+    private static Logger log;
 	
 	public static PermissionHandler getHandler(BukkitPlugin plugin) {
 		

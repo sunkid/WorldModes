@@ -36,18 +36,18 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
-
-import com.iminurnetz.bukkit.plugin.util.PluginLogger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DownloadUtils {
 
     // from https://raw.github.com/DiddiZ/LogBlock/master/src/de/diddiz/util/Utils.java
-    public static void download(PluginLogger logger, URL url, File file) throws IOException {
+    public static void download(Logger logger, URL url, File file) throws IOException {
 
         createOrReplaceWithNewFile(file);
         
         final int size = url.openConnection().getContentLength();
-        logger.log("Downloading " + file.getName() + " (" + size / 1024 + "kb) ...");
+        logger.log(Level.INFO, "Downloading " + file.getName() + " (" + size / 1024 + "kb) ...");
         final InputStream in = url.openStream();
         final OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
         final byte[] buffer = new byte[1024];
@@ -57,13 +57,13 @@ public class DownloadUtils {
             out.write(buffer, 0, len);
             downloaded += len;
             if ((int) ((System.currentTimeMillis() - start) / 500) > msgs) {
-                logger.log((int) (downloaded / (double) size * 100d) + "%");
+                logger.log(Level.INFO, (int) (downloaded / (double) size * 100d) + "%");
                 msgs++;
             }
         }
         in.close();
         out.close();
-        logger.log("Download finished");
+        logger.log(Level.INFO, "Download finished");
     }
 
     public static void createOrReplaceWithNewFile(File file) throws IOException {
