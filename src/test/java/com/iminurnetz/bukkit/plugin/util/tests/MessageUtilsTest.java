@@ -38,6 +38,6 @@ public class MessageUtilsTest  extends TestCase {
 	}
 	
 	private String getOldCode(ChatColor color) {
-		return "&" + Integer.toHexString( 0x10 | color.getCode()).substring(1).toLowerCase();
+        return new String("&" + color.getChar()).toLowerCase();
 	}
 }

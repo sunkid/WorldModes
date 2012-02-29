@@ -2,6 +2,10 @@ Listed below are released versions and cumulative changes between them
 
 ${project.version}
 
+* update for bukkit 1.1 R5
+
+2.4
+
 * update for bukkit 1.1 R4
 
 2.2
