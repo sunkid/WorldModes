@@ -37,23 +37,12 @@ public class MessageUtils {
 		Matcher m = p.matcher(original);
 		
 		while (m.find()) {
-			result = result.replaceAll(m.group(), ChatColor.getByCode(toInt(m.group(1))).toString());
+            result = result.replaceAll(m.group(), ChatColor.getByChar(m.group(1)).toString());
 		}
 		
 		return result;
 	}
 
-	private static int toInt(String string) {
-		String s = string.trim();
-		if (s.length() > 1)
-			return -1;
-		try {
-			return Integer.parseInt(s, 16);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-	}
-	
 	public static void send(CommandSender sender, String message) {
 		send(sender, ChatColor.WHITE, message);
 	}
