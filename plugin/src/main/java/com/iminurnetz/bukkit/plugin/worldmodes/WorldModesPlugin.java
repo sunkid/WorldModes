@@ -24,16 +24,12 @@
 package com.iminurnetz.bukkit.plugin.worldmodes;
 
 import java.io.File;
-import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 
@@ -50,19 +46,9 @@ public class WorldModesPlugin extends BukkitPlugin {
         PluginManager pm = getServer().getPluginManager();
         permissionHandler = PermissionHandlerService.getHandler(this);
 
-        WMPlayerListener playerListener = new WMPlayerListener(this, permissionHandler);
-        WMEntityListener entityListener = new WMEntityListener(this);
-
-        pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, playerListener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_DROP_ITEM, playerListener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Priority.Lowest, this);
-        pm.registerEvent(Type.PLAYER_INTERACT_ENTITY, playerListener, Priority.Lowest, this);
-
-        pm.registerEvent(Type.PLAYER_JOIN, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Type.PLAYER_CHANGED_WORLD, playerListener, Priority.Monitor, this);
-        pm.registerEvent(Type.ENTITY_DEATH, entityListener, Priority.Monitor, this);
-
-        pm.registerEvent(Type.PLAYER_GAME_MODE_CHANGE, new GameModeChangePlayerListener(this, permissionHandler), Priority.Monitor, this);
+        pm.registerEvents(new WMPlayerListener(this, permissionHandler), this);
+        pm.registerEvents(new WMEntityListener(this), this);
+        pm.registerEvents(new GameModeChangePlayerListener(this, permissionHandler), this);
     }
 
     @Override

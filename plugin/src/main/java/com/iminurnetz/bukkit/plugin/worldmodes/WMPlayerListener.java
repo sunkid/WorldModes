@@ -30,6 +30,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -39,13 +41,12 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
-public class WMPlayerListener extends PlayerListener implements Listener {
+public class WMPlayerListener implements Listener {
     private static final String PERMISSION_PREFIX = "worldmodes.mode.";
     private final WorldModesPlugin plugin;
     private final PermissionHandler permissionHandler;
@@ -55,12 +56,12 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
         controlGameMode(event);
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         // sillyness until SpaceManiac fixes PermissionsBukkit
         PlayerMoveEvent e = new PlayerMoveEvent(event.getPlayer(), event.getPlayer().getLocation(), event.getPlayer().getLocation());
@@ -68,14 +69,14 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         controlGameMode(event);
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if (checkDropPermission(event)) {
             MessageUtils.send(event.getPlayer(), ChatColor.RED, "You are not allowed to drop items!");
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
         if (block == null || event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -89,7 +90,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof StorageMinecart) {
             if (checkDropPermission(event)) {
@@ -108,7 +109,7 @@ public class WMPlayerListener extends PlayerListener implements Listener {
         return false;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
         Player player = event.getPlayer();
         if (!hasPermission(player, event.getNewGameMode())) {
