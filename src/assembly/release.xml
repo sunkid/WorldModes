@@ -21,6 +21,7 @@
 			<outputDirectory>/</outputDirectory>
 			<directory>${project.build.directory}/../../base/target/classes/</directory>
 			<includes>
+				<include>**/*Version.class</include>
 				<include>**/BukkitPlugin*.class</include>
 				<include>**/UnsupportedServerVersionException*.class</include>
 				<include>**/MessageUtils*.class</include>
