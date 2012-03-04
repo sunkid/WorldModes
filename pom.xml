@@ -10,6 +10,11 @@
 		<module>base</module>
 		<module>plugin</module>
 	</modules>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bukkit.version>1.1-R4-SNAPSHOT</bukkit.version>
+		<compatibility.version>1.1-R4</compatibility.version>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -60,7 +65,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.1-R4-SNAPSHOT</version>
+			<version>${bukkit.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
