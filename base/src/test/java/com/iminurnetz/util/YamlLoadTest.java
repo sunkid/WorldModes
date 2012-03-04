@@ -1,4 +1,4 @@
-package com.iminurnetz.util.tests;
+package com.iminurnetz.util;
 
 import java.io.InputStream;
 

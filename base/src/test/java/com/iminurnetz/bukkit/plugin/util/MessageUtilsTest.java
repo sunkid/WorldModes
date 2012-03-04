@@ -21,7 +21,7 @@
  * Commercial Use:
  *    Please contact sunkid@iminurnetz.com
  */
-package com.iminurnetz.bukkit.plugin.util.tests;
+package com.iminurnetz.bukkit.plugin.util;
 
 import junit.framework.TestCase;
 

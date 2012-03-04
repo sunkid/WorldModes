@@ -1,7 +1,8 @@
 Listed below are released versions and cumulative changes between them
 
-2.5
+2.6
 
+* bukkit version compatibility check
 * update for bukkit 1.1 R5
 
 2.4
