@@ -367,7 +367,6 @@ public abstract class BukkitPlugin extends JavaPlugin {
             String[] fields = latestVersion.split("\\t");
             latestVersion = fields[0];
             retval.bukkitVersion = new BukkitVersion(fields[1]);
-            log("Bukkit version is " + retval.bukkitVersion);
         }
 
         retval.version = new Version(latestVersion.trim());
