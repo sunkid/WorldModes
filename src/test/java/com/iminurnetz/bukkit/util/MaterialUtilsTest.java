@@ -22,7 +22,7 @@
  *    Please contact sunkid@iminurnetz.com
  */
 
-package com.iminurnetz.bukkit.util.tests;
+package com.iminurnetz.bukkit.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;

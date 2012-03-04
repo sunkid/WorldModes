@@ -28,8 +28,20 @@ import org.bukkit.plugin.AuthorNagException;
 public class UnsupportedServerVersionException extends AuthorNagException {
     private static final long serialVersionUID = 1L;
 
+    private Throwable cause = null;
+
     public UnsupportedServerVersionException(String message) {
         super(message);
+    }
+
+    public UnsupportedServerVersionException(String message, Throwable e) {
+        this(message);
+        this.cause = e;
+    }
+
+    @Override
+    public Throwable getCause() {
+        return cause;
     }
 
 }
