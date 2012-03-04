@@ -24,6 +24,7 @@
 				<include>**/*Version.class</include>
 				<include>**/BukkitPlugin*.class</include>
 				<include>**/UnsupportedServerVersionException*.class</include>
+				<include>**/StringUtils*.class</include>
 				<include>**/MessageUtils*.class</include>
 				<include>**/PluginLogger*.class</include>
 				<include>**/DownloadUtils*.class</include>
