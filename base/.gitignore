@@ -1,8 +1,0 @@
-bin/
-reports/
-out.map
-target/
-src/main/resources/buildNumber.properties
-.classpath
-.project
-.settings/

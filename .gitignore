@@ -2,4 +2,4 @@
 .project
 .settings/
 target/
-plugin/src/main/resources/buildNumber.properties
+src/main/resources/buildNumber.properties

@@ -1,8 +1,0 @@
-# This is the default configuration for <FIXME>
-
-# IF THE VERSION BELOW IS NOT THE VERSION IN YOUR config.yml CHECK FOR
-# NEW PARAMETERS AND ADD THEM TO YOUR config.yml. THEN, AND ONLY THEN,
-# CHANGE THE VERSION IN YOUR config.yml TO THE ONE BELOW.
-settings:
-    # version of the last update of the config file
-    version: 0.0
