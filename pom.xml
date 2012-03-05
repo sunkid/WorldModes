@@ -90,7 +90,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>../release</outputDirectory>
+              <outputDirectory>release</outputDirectory>
               <resources>          
                 <resource>
                   <directory>src/main/resources</directory>
