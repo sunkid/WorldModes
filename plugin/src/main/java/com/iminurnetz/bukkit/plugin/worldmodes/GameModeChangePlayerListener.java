@@ -34,13 +34,15 @@ import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerListener;
 
 import com.iminurnetz.bukkit.permissions.PermissionHandler;
 import com.iminurnetz.bukkit.plugin.util.MessageUtils;
 
-public class GameModeChangePlayerListener extends PlayerListener {
+public class GameModeChangePlayerListener implements Listener {
     private final WorldModesPlugin plugin;
     private final PermissionHandler permissionHandler;
 
@@ -49,7 +51,7 @@ public class GameModeChangePlayerListener extends PlayerListener {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
         if (event.isCancelled()) {
             return;

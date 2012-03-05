@@ -26,10 +26,12 @@ package com.iminurnetz.bukkit.plugin.worldmodes;
 import java.io.File;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 
-public class WMEntityListener extends EntityListener {
+public class WMEntityListener implements Listener {
 
     private final WorldModesPlugin plugin;
 
@@ -37,7 +39,7 @@ public class WMEntityListener extends EntityListener {
         this.plugin = plugin;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDeath(EntityDeathEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
