@@ -31,7 +31,7 @@ public class BukkitPluginSelfUpdateTest extends TestCase {
         }
 
         @Override
-        public String getName() {
+        public String getPluginName() {
             return "BaseBukkitPlugin";
         }
     }

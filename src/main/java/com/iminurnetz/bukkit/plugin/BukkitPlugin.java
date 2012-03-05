@@ -118,10 +118,6 @@ public abstract class BukkitPlugin extends JavaPlugin {
         return description;
     }
 
-    public String getName() {
-        return getDescription().getName();
-    }
-
     public String getVersion() {
         return getDescription().getVersion();
     }
@@ -143,15 +139,20 @@ public abstract class BukkitPlugin extends JavaPlugin {
     }
 
     public String getFullMessagePrefix(ChatColor color) {
-        return MessageUtils.colorize(color, "[" + getName() + " " + getVersion() + "] ");
+        return MessageUtils.colorize(color, "[" + getPluginName() + " " + getVersion() + "] ");
     }
 
     public String getMessagePrefix() {
-        return "[" + getName() + "] ";
+        return "[" + getPluginName() + "] ";
     }
 
     public String getMessagePrefix(ChatColor color) {
         return MessageUtils.colorize(color, getMessagePrefix());
+    }
+
+    // wrapped here so plugins can override and test
+    protected String getPluginName() {
+        return getName();
     }
 
     @Override
@@ -178,14 +179,14 @@ public abstract class BukkitPlugin extends JavaPlugin {
 
             enablePlugin();
 
-            if (!getName().equals(BASE_BUKKIT_PLUGIN)) {
+            if (!getPluginName().equals(BASE_BUKKIT_PLUGIN)) {
                 Configuration config = getConfig();
                 if (!config.getBoolean("settings.disable-stats", false)) {
                     postUsage();
                 }
 
                 if (!config.getBoolean("settings.disable-updates", false)) {
-                    File jarFile = new File(getDataFolder().getParentFile(), getName() + ".jar");
+                    File jarFile = new File(getDataFolder().getParentFile(), getPluginName() + ".jar");
                     try {
                         checkAndUpdateJarFile(jarFile, true);
                     } catch (Exception e) {
@@ -212,7 +213,7 @@ public abstract class BukkitPlugin extends JavaPlugin {
 
         values.put("ip", ip);
         values.put("port", String.valueOf(getServer().getPort()));
-        values.put("plugin", getName());
+        values.put("plugin", getPluginName());
         values.put("version", getVersion());
 
         try {
@@ -317,7 +318,7 @@ public abstract class BukkitPlugin extends JavaPlugin {
         if (!timeStamp.exists() && create) {
             try {
                 BufferedWriter out = new BufferedWriter(new FileWriter(timeStamp));
-                out.write("remove this file to force the version checks for BaseBukkitPlugin and " + getName() + "\n");
+                out.write("remove this file to force the version checks for BaseBukkitPlugin and " + getPluginName() + "\n");
                 out.close();
             } catch (IOException e) {
                 log(Level.SEVERE, "Cannot create time stamp", e);
@@ -355,7 +356,7 @@ public abstract class BukkitPlugin extends JavaPlugin {
     }
 
     protected VersionTuple getLatestVersionFromRepository() throws IOException {
-        return getLatestVersionFromRepository(getName());
+        return getLatestVersionFromRepository(getPluginName());
     }
 
     private VersionTuple getLatestVersionFromRepository(String project) throws IOException {
