@@ -1,5 +1,9 @@
 Listed below are released versions and cumulative changes between them
 
+2.7
+
+* compatibility with 1.2.3-R0.2 (backwards compatible)
+
 2.6
 
 * bukkit version compatibility check
