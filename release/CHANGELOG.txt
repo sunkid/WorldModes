@@ -1,6 +1,6 @@
 Listed below are released versions and cumulative changes between them
 
-2.64
+2.65
 
 * update for BaseBukkitPlugin 2.7
 

@@ -1,4 +1,4 @@
-WorldModes 2.64
+WorldModes 2.65
 
 This plugin allows server administrators to enforce world-specific game mode
 restrictions.
