@@ -151,7 +151,7 @@ public class WorldModesPlugin extends BukkitPlugin {
         dump.append(ChatColor.GREEN + player.getName() + ChatColor.WHITE + " is currently in " + ChatColor.RED + player.getGameMode() + ChatColor.WHITE + "\n");
         dump.append("Their permissions in world " + ChatColor.GREEN + player.getWorld().getName() + ChatColor.WHITE + " are as follows:\n");
 
-        for (Permission permission : getDescription().getPermissions()) {
+        for (Permission permission : getMyDescription().getPermissions()) {
             dump.append("    " + ChatColor.YELLOW + permission.getName() + ": ");
             dump.append(permissionHandler.hasPermission(player, permission.getName()) ? ChatColor.GREEN + "TRUE" : ChatColor.RED + "FALSE");
             dump.append("\n");
